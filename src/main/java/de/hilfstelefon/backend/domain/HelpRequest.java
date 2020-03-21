@@ -14,9 +14,11 @@ public class HelpRequest extends PanacheEntity {
 
     public LocalDateTime creationDate;
 
-    public String transcription;
+    public String city;
 
-    public String location;
+    public String zip;
+
+    public String transcription;
 
     public Category category = Category.SUPPORT;
 
