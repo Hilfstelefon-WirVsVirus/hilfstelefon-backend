@@ -1,6 +1,6 @@
 package de.hilfstelefon.backend.resource.twilio;
 
-import static spark.Spark.post;
+//import static spark.Spark.post;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -8,11 +8,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.twilio.twiml.VoiceResponse;
+/*import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Gather;
 import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Record;
-import com.twilio.twiml.voice.Say;
+import com.twilio.twiml.voice.Say;*/
 
 @Path("/twilio/incoming")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -21,6 +21,7 @@ public class IncomingWebhook {
 
     @POST
     public void incomingCall() {
+/*
         post("/answer", (req, res) -> {
         	Say instructions = new Say.Builder("Hello. Please leave a message after the beep.").build();
 
@@ -48,6 +49,6 @@ public class IncomingWebhook {
 
             return twiml.toXml();
         });
+*/
     }
-
 }
