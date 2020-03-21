@@ -28,7 +28,8 @@ public class HelpRequestRepository implements PanacheRepository<HelpRequest> {
         HelpRequest helpRequest = new HelpRequest();
         helpRequest.creationDate = LocalDateTime.now();
         helpRequest.transcription = "Lorem Ipsum";
-        helpRequest.location = "Hamburg";
+        helpRequest.city = "Bremen";
+        helpRequest.zip = "28203";
 
         return helpRequest;
     }
