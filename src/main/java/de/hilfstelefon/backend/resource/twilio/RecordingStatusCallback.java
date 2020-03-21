@@ -16,16 +16,13 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 public class RecordingStatusCallback {
 
+    public static final String PATH = "/twilio/status/recording";
+
     @POST
     @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
-            @FormParam("AccountSid") String accountSid,
-            @FormParam("Caller") String caller,
-            @FormParam("FromCity") String fromCity,
-            @FormParam("FromZip") String fromZip,
-            @FormParam("Timestamp") String timestamp,
-            @FormParam("CallStatus") String callStatus
+            @FormParam("RecordingSid") String recordingSid
     ) {
         System.out.println("Recording status updated");
     }

@@ -16,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 public class TranscriptionStatusCallback {
 
+    public static final String PATH = "/twilio/status/transcription";
+
     @POST
     @Transactional
     public void statusChanged(

@@ -29,6 +29,9 @@ public class IncomingWebhook {
     @Inject
     TwilioCallRepository twilioCallRepository;
 
+    @ConfigProperty(name = "hilfstelefon.url")
+    String callbackUrl;
+
     @ConfigProperty(name = "twilio.phone-number")
     String phoneNumber;
 
@@ -59,18 +62,31 @@ public class IncomingWebhook {
                         .build())
                 .build();
 
-        // TODO: url?
         Number number = new Number.Builder(phoneNumber)
-                .statusCallback("https://www.hilfstelefon.de/twilio/status")
+                .statusCallback(this.getCallbackUrl(CallStatusCallback.PATH))
                 .statusCallbackMethod(HttpMethod.POST)
-                .statusCallbackEvents(Collections.singletonList(Number.Event.COMPLETED)).build();
+                .statusCallbackEvents(Collections.singletonList(Number.Event.COMPLETED))
+                .build();
 
-        builder.record(new Record.Builder().build())
+        Record record = new Record.Builder()
+                .recordingStatusCallback(this.getCallbackUrl(RecordingStatusCallback.PATH))
+                .recordingStatusCallbackMethod(HttpMethod.POST)
+                .recordingStatusCallbackEvents(Collections.singletonList(Record.RecordingEvent.COMPLETED))
+                .playBeep(true)
+                .transcribe(true)
+                .transcribeCallback(this.getCallbackUrl(TranscriptionStatusCallback.PATH))
+                .build();
+
+        builder.record(record)
                 .gather(gather)
                 .dial(new Dial.Builder().number(number).build())
                 .hangup(new Hangup.Builder().build());
 
 
         return builder.build();
+    }
+
+    private String getCallbackUrl(String path) {
+        return "https://" + this.callbackUrl + "/" + path;
     }
 }

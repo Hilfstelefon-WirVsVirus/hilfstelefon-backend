@@ -21,13 +21,7 @@ public class TwilioClient {
     String accountSid;
 
     public TwilioClient() {
-        /*
-        twilio = Twilio.init(
-                username,
-                password,
-                accountSid
-        ).getRestClient();
-         */
+
     }
 
     public byte[] fetchRecordedCall(TwilioCall call) {
