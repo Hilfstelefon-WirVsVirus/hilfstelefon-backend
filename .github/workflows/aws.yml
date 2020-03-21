@@ -24,9 +24,9 @@
 #    and best practices on handling the access key credentials.
 
 on:
-  create:
-    tags:
-      - v*
+  release:
+    types:
+      - created
 
 name: Deploy to Amazon ECS
 
@@ -34,6 +34,8 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+
+    timeout-minutes: 10
 
     steps:
     - name: Checkout
