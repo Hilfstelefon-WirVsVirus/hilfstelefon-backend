@@ -14,7 +14,7 @@ import io.vertx.core.eventbus.EventBus;
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 public class CallStatusCallback {
 
-    public static final String PATH = "/twilio/status/call";
+    public static final String PATH = "twilio/status/call";
 
     private static final String STATUS_COMPLETED = "completed";
 

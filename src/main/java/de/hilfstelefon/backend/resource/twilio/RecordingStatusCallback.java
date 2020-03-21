@@ -13,11 +13,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-@Path("//twilio/status/recording")
+@Path("/twilio/status/recording")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 public class RecordingStatusCallback {
 
-    public static final String PATH = "/twilio/status/recording";
+    public static final String PATH = "twilio/status/recording";
 
     @Inject
     EventBus eventBus;
