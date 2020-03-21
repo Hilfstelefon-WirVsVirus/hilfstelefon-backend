@@ -2,6 +2,8 @@ package de.hilfstelefon.backend.resource.twilio;
 
 import de.hilfstelefon.backend.domain.TwilioCall;
 import de.hilfstelefon.backend.events.TwilioCallCompleted;
+import de.hilfstelefon.backend.events.TwilioRecordingCompleted;
+import de.hilfstelefon.backend.events.TwilioTranscriptionCompleted;
 import io.vertx.core.eventbus.EventBus;
 
 import javax.inject.Inject;
@@ -18,17 +20,15 @@ public class TranscriptionStatusCallback {
 
     public static final String PATH = "/twilio/status/transcription";
 
+    @Inject
+    EventBus eventBus;
+
     @POST
     @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
-            @FormParam("AccountSid") String accountSid,
-            @FormParam("Caller") String caller,
-            @FormParam("FromCity") String fromCity,
-            @FormParam("FromZip") String fromZip,
-            @FormParam("Timestamp") String timestamp,
-            @FormParam("CallStatus") String callStatus
+            @FormParam("RecordingSid") String recordingSid
     ) {
-        System.out.println("Transcription status updated");
+        eventBus.publish(TwilioTranscriptionCompleted.EVENTNAME, new TwilioTranscriptionCompleted(callSid, recordingSid));
     }
 }

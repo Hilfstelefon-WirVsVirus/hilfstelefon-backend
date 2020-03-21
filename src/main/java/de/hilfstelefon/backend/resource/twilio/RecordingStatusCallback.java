@@ -2,6 +2,7 @@ package de.hilfstelefon.backend.resource.twilio;
 
 import de.hilfstelefon.backend.domain.TwilioCall;
 import de.hilfstelefon.backend.events.TwilioCallCompleted;
+import de.hilfstelefon.backend.events.TwilioRecordingCompleted;
 import io.vertx.core.eventbus.EventBus;
 
 import javax.inject.Inject;
@@ -18,12 +19,15 @@ public class RecordingStatusCallback {
 
     public static final String PATH = "/twilio/status/recording";
 
+    @Inject
+    EventBus eventBus;
+
     @POST
     @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
             @FormParam("RecordingSid") String recordingSid
     ) {
-        System.out.println("Recording status updated");
+        eventBus.publish(TwilioRecordingCompleted.EVENTNAME, new TwilioRecordingCompleted(callSid, recordingSid));
     }
 }
