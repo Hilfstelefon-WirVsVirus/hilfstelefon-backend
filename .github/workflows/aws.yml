@@ -44,7 +44,7 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      run: ./mvnw package
+      run: ./mvnw package -DskipTests
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
