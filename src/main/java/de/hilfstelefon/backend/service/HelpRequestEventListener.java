@@ -3,6 +3,7 @@ package de.hilfstelefon.backend.service;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.twilio.Twilio;
@@ -28,9 +29,6 @@ import de.hilfstelefon.backend.events.HelpRequestAvailable;
 import de.hilfstelefon.backend.repository.HelpRequestRepository;
 import io.quarkus.vertx.ConsumeEvent;
 import io.vertx.core.eventbus.EventBus;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @ApplicationScoped
 public class HelpRequestEventListener {
@@ -111,7 +109,6 @@ public class HelpRequestEventListener {
                     restException.getStatus(), null);
         }
 
-        final InputStream mp3Stream = response.getStream();
-        return mp3Stream;
+        return response.getStream();
     }
 }
