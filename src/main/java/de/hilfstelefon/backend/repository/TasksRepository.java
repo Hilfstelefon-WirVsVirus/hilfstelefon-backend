@@ -3,6 +3,7 @@ package de.hilfstelefon.backend.repository;
 import javax.enterprise.context.ApplicationScoped;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hilfstelefon.backend.domain.Task;
@@ -15,11 +16,12 @@ public class TasksRepository implements PanacheRepository<Task> {
     // TODO: Add specific non-generic methods
 
     public List<Task> getExamples() {
-        return List.of(
-                createTask(),
-                createTask(),
-                createTask()
-        );
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(createTask());
+        tasks.add(createTask());
+        tasks.add(createTask());
+
+        return tasks;
     }
 
     private Task createTask() {
