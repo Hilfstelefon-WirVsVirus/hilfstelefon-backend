@@ -7,6 +7,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+      POSTGRES_DB: ${POSTGRES_DB:-hilfstelefon}
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
