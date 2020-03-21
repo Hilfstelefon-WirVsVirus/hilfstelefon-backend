@@ -31,14 +31,10 @@
             ],
             "secrets": [
                 {
-                    "name": "DB_URL",
-                    "valueFrom": "arn:aws:secretsmanager:eu-central-1:108653314183:secret:hilfstelefon/pgsql-035Jwl:DB_URL"
-                },
-                {
-                    "name": "DB_PASSWORD",
-                    "valueFrom": "arn:aws:secretsmanager:eu-central-1:108653314183:secret:hilfstelefon/pgsql-035Jwl:DB_PASSWORD"
+                    "name": "PG_SECRET",
+                    "valueFrom": "arn:aws:secretsmanager:eu-central-1:108653314183:secret:hilfstelefon/pgsql-035Jwl"
                 }
-              ]
+            ]
         }
     ],
     "requiresCompatibilities": [
