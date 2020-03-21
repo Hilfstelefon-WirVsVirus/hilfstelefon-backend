@@ -8,8 +8,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import io.quarkus.panache.common.Page;
 import de.hilfstelefon.backend.domain.HelpRequest;
+import de.hilfstelefon.backend.domain.Status;
 import de.hilfstelefon.backend.repository.HelpRequestRepository;
 
 @Path("/help-request")
@@ -21,10 +21,9 @@ public class HelpRequestResource {
     HelpRequestRepository helpRequestRepository;
 
     @GET
-    public java.util.List<HelpRequest> getAll(@QueryParam("index") Integer index) {
-        Page page = Page.of(index != null ? index : 0, 20);
-
-        return helpRequestRepository.getExamples();
-        //return tasksRepository.findAll().page(page).list();
+    public java.util.List<HelpRequest> getAll(@QueryParam("city") String city,
+                                              @QueryParam("zip") String zip,
+                                              @QueryParam("status") Status status) {
+        return helpRequestRepository.find(city, zip, status);
     }
 }
