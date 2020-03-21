@@ -8,21 +8,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import java.util.Arrays;
+
+import com.twilio.http.HttpMethod;
 import com.twilio.twiml.VoiceResponse;
+import com.twilio.twiml.voice.Dial;
 import com.twilio.twiml.voice.Gather;
 import com.twilio.twiml.voice.Hangup;
+import com.twilio.twiml.voice.Number;
 import com.twilio.twiml.voice.Record;
 import com.twilio.twiml.voice.Say;
-import de.hilfstelefon.backend.domain.TwilioCall;
-import de.hilfstelefon.backend.domain.TwilioConfig;
-import com.twilio.twiml.voice.Dial;
-import com.twilio.twiml.voice.Number;
-import com.twilio.twiml.VoiceResponse;
-import com.twilio.twiml.TwiMLException;
-import com.twilio.http.HttpMethod;
 import de.hilfstelefon.backend.repository.TwilioCallRepository;
-
-import java.util.Arrays;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/twilio/incoming")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -31,6 +28,9 @@ public class IncomingWebhook {
 
     @Inject
     TwilioCallRepository twilioCallRepository;
+
+    @ConfigProperty(name = "twilio.phone-number")
+    String phoneNumber;
 
     @POST
     public String incomingCall(
@@ -60,7 +60,7 @@ public class IncomingWebhook {
                 .build();
 
         // TODO: url?
-        Number number = new Number.Builder(TwilioConfig.PHONE_NUMBER)
+        Number number = new Number.Builder(phoneNumber)
                 .statusCallback("https://www.hilfstelefon.de/twilio/status")
                 .statusCallbackMethod(HttpMethod.POST)
                 .statusCallbackEvents(Arrays.asList(Number.Event.COMPLETED)).build();

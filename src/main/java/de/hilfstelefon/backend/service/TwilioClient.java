@@ -1,24 +1,31 @@
 package de.hilfstelefon.backend.service;
 
-import com.twilio.Twilio;
-import com.twilio.http.TwilioRestClient;
-import de.hilfstelefon.backend.domain.TwilioCall;
-import de.hilfstelefon.backend.domain.TwilioConfig;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+
+import com.twilio.Twilio;
+import de.hilfstelefon.backend.domain.TwilioCall;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class TwilioClient {
 
     private Twilio twilio;
 
+    @ConfigProperty(name = "twilio.username")
+    String username;
+
+    @ConfigProperty(name = "twilio.password")
+    String password;
+
+    @ConfigProperty(name = "twilio.account-sid")
+    String accountSid;
+
     public TwilioClient() {
         /*
         twilio = Twilio.init(
-                TwilioConfig.USERNAME,
-                TwilioConfig.PASSWORD,
-                TwilioConfig.ACCOUNT_SID
+                username,
+                password,
+                accountSid
         ).getRestClient();
          */
     }
