@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import com.twilio.http.HttpMethod;
 import com.twilio.twiml.VoiceResponse;
@@ -63,7 +63,7 @@ public class IncomingWebhook {
         Number number = new Number.Builder(phoneNumber)
                 .statusCallback("https://www.hilfstelefon.de/twilio/status")
                 .statusCallbackMethod(HttpMethod.POST)
-                .statusCallbackEvents(Arrays.asList(Number.Event.COMPLETED)).build();
+                .statusCallbackEvents(Collections.singletonList(Number.Event.COMPLETED)).build();
 
         builder.record(new Record.Builder().build())
                 .gather(gather)
