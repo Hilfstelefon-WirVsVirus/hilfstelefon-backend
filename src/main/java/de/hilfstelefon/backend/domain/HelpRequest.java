@@ -20,6 +20,8 @@ public class HelpRequest extends PanacheEntity {
 
     public String transcription;
 
+    public byte[] audio;
+
     public Category category = Category.SUPPORT;
 
     public Status status = Status.OPEN;
