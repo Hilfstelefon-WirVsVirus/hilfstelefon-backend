@@ -15,7 +15,7 @@ public class TwilioCallRepository implements PanacheRepository<TwilioCall> {
         }
 
         twilioCall = new TwilioCall();
-        twilioCall.callSid = callSid;
+        twilioCall.callsid = callSid;
 
         return twilioCall;
     }

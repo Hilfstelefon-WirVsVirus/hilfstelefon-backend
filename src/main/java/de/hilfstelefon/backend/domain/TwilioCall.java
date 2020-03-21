@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 @Entity
 public class TwilioCall extends PanacheEntity {
 
-    public String callSid;
-    public String caller;
-    public String fromCity;
-    public String fromZip;
+    public String callsid;
+    public String phonenumber;
+    public String city;
+    public String zip;
     public String timestamp;
 }

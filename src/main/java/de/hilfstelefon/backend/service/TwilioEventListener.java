@@ -21,9 +21,9 @@ public class TwilioEventListener {
         System.out.println("Processing call " + event.getCallSid());
 
         TwilioCall call = repository.getOrCreate(event.getCallSid());
-        call.caller = event.getCaller();
-        call.fromCity = event.getFromCity();
-        call.fromZip = event.getFromZip();
+        call.phonenumber = event.getCaller();
+        call.city = event.getFromCity();
+        call.zip = event.getFromZip();
         call.timestamp = event.getTimestamp();
 
         repository.persist(call);
