@@ -1,0 +1,34 @@
+{
+    "family": "backend",
+    "executionRoleArn": "arn:aws:iam::108653314183:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "hilfstelefon-backend",
+            "image": "",
+            "cpu": 512,
+            "portMappings": [
+              {
+                "hostPort": 8080,
+                "protocol": "tcp",
+                "containerPort": 8080
+              }
+            ],
+            "memory": 1024,
+            "essential": true,
+            "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                "awslogs-group": "/ecs/backend",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "512",
+    "memory": "1024"
+  }
