@@ -1,54 +1,42 @@
 package de.hilfstelefon.backend.resource.twilio;
 
-//import static spark.Spark.post;
-
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-/*import com.twilio.twiml.VoiceResponse;
+import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Gather;
 import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Record;
-import com.twilio.twiml.voice.Say;*/
+import com.twilio.twiml.voice.Say;
 
 @Path("/twilio/incoming")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+@Produces(MediaType.APPLICATION_XML)
 public class IncomingWebhook {
 
     @POST
-    public void incomingCall() {
-/*
-        post("/answer", (req, res) -> {
-        	Say instructions = new Say.Builder("Hello. Please leave a message after the beep.").build();
+    public String incomingCall(@FormParam("FromCity") String city, @FormParam("FromZip") String zip) {
+        VoiceResponse.Builder builder = new VoiceResponse.Builder();
 
-            // Use <Record> to record the caller's message
-            Record record = new Record.Builder().build();
-            
-            Gather gather = new Gather.Builder()
-            .numDigits(5)
-            .say(new Say.Builder("Please enter your zip code.").build())
-            .build();
+        builder.say(new Say.Builder("Hallo, du brauchst Hilfe? Hinterlasse uns dein Anliegen gleich nach dem Piepton.")
+                .language(Say.Language.DE_DE)
+                .build());
 
-            // End the call with <Hangup>
-            Hangup hangup = new Hangup.Builder().build();
-            
+        // TODO: Gather only if ZIP code/city is not recognized
+        builder.gather(new Gather.Builder()
+                .numDigits(5)
+                .say(new Say.Builder("Bitte tippen Sie Ihre Postleitzahl ein.")
+                        .language(Say.Language.DE_DE)
+                        .build())
+                .build());
 
-            // Create a TwiML builder object
-            VoiceResponse twiml = new VoiceResponse.Builder()
-                .say(instructions)
-                .gather(gather)
-                .record(record)
-                .hangup(hangup)
-                .build();
+        builder.record(new Record.Builder().build())
+                .hangup(new Hangup.Builder().build());
 
-            System.out.println(twiml.toXml());
-
-            return twiml.toXml();
-        });
-*/
+        return builder.build().toXml();
     }
 }
