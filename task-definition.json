@@ -31,7 +31,7 @@
             ],
             "secrets": [
                 {
-                    "name": "PG_SECRET",
+                    "name": "PG_SECRETS",
                     "valueFrom": "arn:aws:secretsmanager:eu-central-1:108653314183:secret:hilfstelefon/pgsql-035Jwl"
                 }
             ]
