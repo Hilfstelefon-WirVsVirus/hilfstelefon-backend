@@ -8,8 +8,20 @@ import javax.persistence.Entity;
 public class TwilioCall extends PanacheEntity {
 
     public String callsid;
+    public String recording_sid;
+
     public String phonenumber;
     public String city;
     public String zip;
     public String timestamp;
+
+    public boolean transcription_completed;
+
+    public boolean isTranscriptionCompleted() {
+        return this.transcription_completed;
+    }
+
+    public boolean isRecordingCompleted() {
+        return recording_sid != "";
+    }
 }

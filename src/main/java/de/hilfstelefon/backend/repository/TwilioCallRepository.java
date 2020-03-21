@@ -9,7 +9,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 public class TwilioCallRepository implements PanacheRepository<TwilioCall> {
 
     public TwilioCall getOrCreate(String callSid) {
-        TwilioCall twilioCall = find("callsid", callSid).firstResult();
+        TwilioCall twilioCall = this.get(callSid);
         if (twilioCall != null) {
             return twilioCall;
         }
@@ -17,6 +17,16 @@ public class TwilioCallRepository implements PanacheRepository<TwilioCall> {
         twilioCall = new TwilioCall();
         twilioCall.callsid = callSid;
 
+        try {
+            this.persistAndFlush(twilioCall);
+        } catch (Exception e) {
+            twilioCall = this.get(callSid);
+        }
+
         return twilioCall;
+    }
+
+    private TwilioCall get(String callSid) {
+        return find("callsid", callSid).firstResult();
     }
 }

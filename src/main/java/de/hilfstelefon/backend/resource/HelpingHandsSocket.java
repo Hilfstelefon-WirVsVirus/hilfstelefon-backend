@@ -1,11 +1,10 @@
 package de.hilfstelefon.backend.resource;
 
 import de.hilfstelefon.backend.domain.HelpRequest;
-import de.hilfstelefon.backend.events.HelpRequestAddedEvent;
+import de.hilfstelefon.backend.events.HelpRequestAdded;
 import de.hilfstelefon.backend.repository.HelpRequestRepository;
 import io.quarkus.vertx.ConsumeEvent;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.enterprise.context.ApplicationScoped;
@@ -37,8 +36,11 @@ public class HelpingHandsSocket {
         sessions.remove(username);
     }
 
-    @ConsumeEvent(HelpRequestAddedEvent.EVENTNAME)
+    @ConsumeEvent(HelpRequestAdded.EVENTNAME)
     private void broadcast(HelpRequest helpRequest) {
+
+        System.out.println("Time to party!!!!!");
+
         sessions.values().forEach(s -> {
             s.getAsyncRemote().sendObject(helpRequest, result ->  {
                 if (result.getException() != null) {
