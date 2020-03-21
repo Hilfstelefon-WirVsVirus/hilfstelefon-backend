@@ -29,6 +29,10 @@ import de.hilfstelefon.backend.repository.HelpRequestRepository;
 import io.quarkus.vertx.ConsumeEvent;
 import io.vertx.core.eventbus.EventBus;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
 public class HelpRequestEventListener {
     @Inject
     HelpRequestRepository helpRequestRepository;
@@ -56,7 +60,6 @@ public class HelpRequestEventListener {
         helpRequestRepository.persist(helpRequest);
 
         eventBus.publish(HelpRequestAdded.EVENTNAME, new HelpRequestAdded(helpRequest));
-
     }
 
     
