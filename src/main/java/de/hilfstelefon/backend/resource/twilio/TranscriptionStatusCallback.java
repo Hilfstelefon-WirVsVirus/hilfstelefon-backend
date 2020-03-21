@@ -27,8 +27,8 @@ public class TranscriptionStatusCallback {
     @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
-            @FormParam("RecordingSid") String recordingSid
+            @FormParam("TranscriptionSid") String transcriptionSid
     ) {
-        eventBus.publish(TwilioTranscriptionCompleted.EVENTNAME, new TwilioTranscriptionCompleted(callSid, recordingSid));
+        eventBus.publish(TwilioTranscriptionCompleted.EVENTNAME, new TwilioTranscriptionCompleted(callSid, transcriptionSid));
     }
 }

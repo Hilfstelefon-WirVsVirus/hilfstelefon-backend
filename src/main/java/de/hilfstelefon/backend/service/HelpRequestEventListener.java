@@ -20,7 +20,8 @@ public class HelpRequestEventListener {
     public void onHelpRequestAvailable(HelpRequestAvailable event) {
         HelpRequest helpRequest = new HelpRequest();
 
-        helpRequest.location = (event.getCall().zip + " " + event.getCall().city).trim();
+        helpRequest.zip = event.getCall().zip;
+        helpRequest.city = event.getCall().city;
 
         // TODO fetch recording, transcription ...
 

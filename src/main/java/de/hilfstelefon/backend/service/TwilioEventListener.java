@@ -69,6 +69,7 @@ public class TwilioEventListener {
             return false;
         }
 
+        System.out.println("Call complete: " + twilioCall.callsid);
         eventBus.publish(HelpRequestAvailable.EVENTNAME, new HelpRequestAvailable(twilioCall));
 
         return true;

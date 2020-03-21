@@ -5,18 +5,18 @@ public class TwilioTranscriptionCompleted {
     public static final String EVENTNAME = "twilioTranscriptionCompletedEvent";
 
     private final String callSid;
-    private final String recordingSid;
+    private final String transcriptionSid;
 
-    public TwilioTranscriptionCompleted(String callSid, String recordingSid) {
+    public TwilioTranscriptionCompleted(String callSid, String transcriptionSid) {
         this.callSid = callSid;
-        this.recordingSid = recordingSid;
+        this.transcriptionSid = transcriptionSid;
     }
 
     public String getCallSid() {
         return callSid;
     }
 
-    public String getRecordingSid() {
-        return recordingSid;
+    public String getTranscriptionSid() {
+        return transcriptionSid;
     }
 }
