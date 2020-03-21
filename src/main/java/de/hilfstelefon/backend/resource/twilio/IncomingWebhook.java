@@ -1,5 +1,6 @@
 package de.hilfstelefon.backend.resource.twilio;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -12,12 +13,15 @@ import com.twilio.twiml.voice.Gather;
 import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Record;
 import com.twilio.twiml.voice.Say;
+import de.hilfstelefon.backend.domain.TwilioCall;
 import de.hilfstelefon.backend.domain.TwilioConfig;
 import com.twilio.twiml.voice.Dial;
 import com.twilio.twiml.voice.Number;
 import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.TwiMLException;
 import com.twilio.http.HttpMethod;
+import de.hilfstelefon.backend.repository.TwilioCallRepository;
+
 import java.util.Arrays;
 
 @Path("/twilio/incoming")
@@ -25,11 +29,23 @@ import java.util.Arrays;
 @Produces(MediaType.APPLICATION_XML)
 public class IncomingWebhook {
 
-    @POST
-    public String incomingCall(@FormParam("FromCity") String city, @FormParam("FromZip") String zip) {
-        VoiceResponse.Builder builder = new VoiceResponse.Builder();
+    @Inject
+    TwilioCallRepository twilioCallRepository;
 
-        System.out.println("Incoming call!");
+    @POST
+    public String incomingCall(
+            @FormParam("CallSid") String callSid,
+            @FormParam("Caller") String caller,
+            @FormParam("FromCity") String fromCity,
+            @FormParam("FromZip") String fromZip
+    ) {
+        System.out.printf("Incoming call %s from %s %s!\n", callSid, fromZip, fromCity);
+
+        return createResponse().toXml();
+    }
+
+    private VoiceResponse createResponse() {
+        VoiceResponse.Builder builder = new VoiceResponse.Builder();
 
         builder.say(new Say.Builder("Hallo, du brauchst Hilfe? Hinterlasse uns dein Anliegen gleich nach dem Piepton.")
                 .language(Say.Language.DE_DE)
@@ -55,6 +71,6 @@ public class IncomingWebhook {
                 .hangup(new Hangup.Builder().build());
 
 
-        return builder.build().toXml();
+        return builder.build();
     }
 }
