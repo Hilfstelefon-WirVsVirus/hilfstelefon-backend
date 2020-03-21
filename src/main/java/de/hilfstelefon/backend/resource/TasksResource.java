@@ -1,4 +1,4 @@
-package org.wirvsvirushackathon.resource;
+package de.hilfstelefon.backend.resource;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -9,8 +9,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import io.quarkus.panache.common.Page;
-import org.wirvsvirushackathon.domain.Task;
-import org.wirvsvirushackathon.repository.TasksRepository;
+import de.hilfstelefon.backend.domain.Task;
+import de.hilfstelefon.backend.repository.TasksRepository;
 
 @Path("/tasks")
 @Consumes(MediaType.APPLICATION_JSON)

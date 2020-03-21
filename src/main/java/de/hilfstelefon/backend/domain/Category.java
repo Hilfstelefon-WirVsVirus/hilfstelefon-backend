@@ -1,4 +1,4 @@
-package org.wirvsvirushackathon.domain;
+package de.hilfstelefon.backend.domain;
 
 public enum Category {
 

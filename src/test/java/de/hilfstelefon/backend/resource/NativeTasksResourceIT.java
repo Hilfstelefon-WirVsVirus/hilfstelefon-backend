@@ -1,4 +1,4 @@
-package org.wirvsvirushackathon.resource;
+package de.hilfstelefon.backend.resource;
 
 import io.quarkus.test.junit.NativeImageTest;
 

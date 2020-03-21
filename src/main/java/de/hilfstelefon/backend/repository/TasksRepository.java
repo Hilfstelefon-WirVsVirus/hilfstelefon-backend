@@ -1,12 +1,12 @@
-package org.wirvsvirushackathon.repository;
+package de.hilfstelefon.backend.repository;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import de.hilfstelefon.backend.domain.Task;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import org.wirvsvirushackathon.domain.Task;
 
 @ApplicationScoped
 public class TasksRepository implements PanacheRepository<Task> {
