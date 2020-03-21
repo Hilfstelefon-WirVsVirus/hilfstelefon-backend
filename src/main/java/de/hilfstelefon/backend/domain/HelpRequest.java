@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
-public class Task extends PanacheEntity {
+public class HelpRequest extends PanacheEntity {
 
     public LocalDateTime creationDate;
 

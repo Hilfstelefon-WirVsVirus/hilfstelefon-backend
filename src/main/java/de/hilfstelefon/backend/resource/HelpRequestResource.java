@@ -9,22 +9,22 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import io.quarkus.panache.common.Page;
-import de.hilfstelefon.backend.domain.Task;
-import de.hilfstelefon.backend.repository.TasksRepository;
+import de.hilfstelefon.backend.domain.HelpRequest;
+import de.hilfstelefon.backend.repository.HelpRequestRepository;
 
-@Path("/tasks")
+@Path("/help-request")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class TasksResource {
+public class HelpRequestResource {
 
     @Inject
-    TasksRepository tasksRepository;
+    HelpRequestRepository helpRequestRepository;
 
     @GET
-    public java.util.List<Task> getAll(@QueryParam("index") Integer index) {
+    public java.util.List<HelpRequest> getAll(@QueryParam("index") Integer index) {
         Page page = Page.of(index != null ? index : 0, 20);
 
-        return tasksRepository.getExamples();
+        return helpRequestRepository.getExamples();
         //return tasksRepository.findAll().page(page).list();
     }
 }
