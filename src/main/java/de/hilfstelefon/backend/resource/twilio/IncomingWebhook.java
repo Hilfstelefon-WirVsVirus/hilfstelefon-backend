@@ -39,6 +39,9 @@ public class IncomingWebhook {
     @Inject
     EventBus eventBus;
 
+    private static final String GATHER_ZIP_PATH = "/twilio/status/zip";
+    private static final String GATHER_REQUEST_PATH = "/twilio/status/request";
+
     @POST
     @Path("/incoming")
     public String incomingCall(
@@ -79,7 +82,7 @@ public class IncomingWebhook {
 
         // TODO: Gather only if ZIP code/city is not recognized
         Gather gatherZip = new Gather.Builder()
-                .action(GatherZipCallback.PATH)
+                .action(GATHER_ZIP_PATH)
                 .numDigits(5)
                 .timeout(10)
                 .speechTimeout("10")
@@ -92,7 +95,7 @@ public class IncomingWebhook {
                 .build();
         
         Gather gatherRequest = new Gather.Builder()
-                .action(GatherRequestCallback.PATH)
+                .action(GATHER_REQUEST_PATH)
                 .timeout(120)
                 .speechTimeout("120")
                 .language(Gather.Language.DE_DE)
