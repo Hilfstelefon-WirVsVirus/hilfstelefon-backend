@@ -52,7 +52,7 @@ public class HelpRequestEventListener {
 
         helpRequestRepository.persist(helpRequest);
 
-        eventBus.publish(HelpRequestAdded.EVENTNAME, new HelpRequestAdded(helpRequest));
+        //eventBus.publish(HelpRequestAdded.EVENTNAME, new HelpRequestAdded(helpRequest));
     }
 
     public byte[] fetchRecordedCall(final TwilioCall call) {
