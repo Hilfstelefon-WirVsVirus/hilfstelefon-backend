@@ -84,11 +84,10 @@ public class IncomingWebhook {
                 .dial(new Dial.Builder().number(number).build())
                 .hangup(new Hangup.Builder().build());
 
-
         return builder.build();
     }
 
     private String getCallbackUrl(String path) {
-        return "https://" + this.callbackUrl + "/" + path;
+        return this.callbackUrl + "/" + path;
     }
 }
