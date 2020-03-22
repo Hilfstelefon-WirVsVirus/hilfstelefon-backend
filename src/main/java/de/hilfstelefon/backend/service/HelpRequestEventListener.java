@@ -3,8 +3,10 @@ package de.hilfstelefon.backend.service;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import com.twilio.Twilio;
 import com.twilio.exception.ApiConnectionException;
@@ -48,6 +50,11 @@ public class HelpRequestEventListener {
     @ConfigProperty(name = "twilio.account-sid")
     String accountSid;
 
+    @PostConstruct
+    public void init() {
+        Twilio.init(accountSid, password);
+    }
+
     @ConsumeEvent(value = HelpRequestAvailable.EVENTNAME, blocking = true)
     public void onHelpRequestAvailable(HelpRequestAvailable event) {
         HelpRequest helpRequest = new HelpRequest();
@@ -64,6 +71,7 @@ public class HelpRequestEventListener {
     }
 
     public byte[] fetchRecordedCall(final TwilioCall call) {
+        final TwilioRestClient restClient = Twilio.getRestClient();
         final RecordingFetcher fetcher = new RecordingFetcher(call.callsid, call.recording_sid);
         final Recording recording = fetcher.fetch(restClient);
 
@@ -83,6 +91,8 @@ public class HelpRequestEventListener {
     }
 
     public String fetchTranscriptedCall(final TwilioCall call) {
+        final TwilioRestClient restClient = Twilio.getRestClient();
+
         final TranscriptionFetcher fetcher = new TranscriptionFetcher(call.recording_sid, call.transcription_sid);
         Transcription trans = fetcher.fetch(restClient);
         return trans.getTranscriptionText();

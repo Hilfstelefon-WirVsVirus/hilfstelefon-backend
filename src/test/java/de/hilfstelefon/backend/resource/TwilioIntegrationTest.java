@@ -18,11 +18,8 @@ import static io.restassured.RestAssured.given;
 public class TwilioIntegrationTest {
 
     private static final String CallSid = "CA0d79906cec45b5ddaafa8a47da903b71";
-    private static final String RecordingSid = "CA0d79906cec45b5ddaafa8a47da903b71";
-    private static final String TranscriptionSid = "CA0d79906cec45b5ddaafa8a47da903b71";
-
-    @Inject
-    TwilioCallRepository twilioCallRepository;
+    private static final String RecordingSid = "RE83d339e74e377ff8239b1eb4d2a2ec37";
+    private static final String TranscriptionSid = "TR6c2dfab546e0c1fda1e9d2090ccacc4f";
 
     @Test
     public void testEverythingIsAwesome() {

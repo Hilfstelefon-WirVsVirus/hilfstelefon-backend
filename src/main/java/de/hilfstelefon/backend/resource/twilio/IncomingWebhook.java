@@ -28,9 +28,6 @@ public class IncomingWebhook {
 
     public static final String PATH = "twilio/incoming";
 
-    @Inject
-    TwilioCallRepository twilioCallRepository;
-
     @ConfigProperty(name = "hilfstelefon.url")
     String callbackUrl;
 
