@@ -8,15 +8,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-import de.hilfstelefon.backend.events.TwilioCallCompleted;
 import de.hilfstelefon.backend.events.TwilioGatherTranscriptionCompleted;
-import de.hilfstelefon.backend.events.TwilioTranscriptionCompleted;
 import io.vertx.core.eventbus.EventBus;
 
 @Path("/twilio/status/transcript")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 public class GatherZipCallback {
-    public static final String PATH = "/twilio/status/transcript";
+    public static final String PATH = "/twilio/status/zip";
 
     public static final String STATUS_COMPLETED = "completed";
 
@@ -27,8 +25,8 @@ public class GatherZipCallback {
     @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
-            @FormParam("SpeechResult") String transcriptionText
+            @FormParam("Digits") String zip
     ) {
-        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME, new TwilioGatherTranscriptionCompleted(callSid, transcriptionText));
+        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, zip);
     }
 }

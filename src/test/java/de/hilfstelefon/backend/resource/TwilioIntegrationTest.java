@@ -1,17 +1,15 @@
 package de.hilfstelefon.backend.resource;
 
-import de.hilfstelefon.backend.repository.TwilioCallRepository;
+import static io.restassured.RestAssured.given;
+
+import javax.transaction.Transactional;
+
+import org.junit.jupiter.api.Test;
+
 import de.hilfstelefon.backend.resource.twilio.CallStatusCallback;
 import de.hilfstelefon.backend.resource.twilio.IncomingWebhook;
 import de.hilfstelefon.backend.resource.twilio.RecordingStatusCallback;
-import de.hilfstelefon.backend.resource.twilio.TranscriptionStatusCallback;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
-import static io.restassured.RestAssured.given;
 
 @QuarkusTest
 @Transactional
@@ -26,7 +24,7 @@ public class TwilioIntegrationTest {
         this.invokeIncommingWebhook();
         this.invokeCallStatusCallback();
         this.invokeRecordingStatusCallback();
-        this.invokeTranscriptionStatusCallback();
+        // this.invokeTranscriptionStatusCallback();
 
         given()
                 .when()
@@ -71,13 +69,13 @@ public class TwilioIntegrationTest {
                 .statusCode(204);
     }
 
-    private void invokeTranscriptionStatusCallback() {
-        given()
-                .when()
-                .param("CallSid", this.CallSid)
-                .param("TranscriptionSid", this.TranscriptionSid)
-                .post("/" + TranscriptionStatusCallback.PATH)
-                .then()
-                .statusCode(204);
-    }
+    // private void invokeTranscriptionStatusCallback() {
+    //     given()
+    //             .when()
+    //             .param("CallSid", this.CallSid)
+    //             .param("TranscriptionSid", this.TranscriptionSid)
+    //             .post("/" + TranscriptionStatusCallback.PATH)
+    //             .then()
+    //             .statusCode(204);
+    // }
 }

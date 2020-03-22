@@ -49,21 +49,34 @@ public class IncomingWebhook {
     private VoiceResponse createResponse() {
         VoiceResponse.Builder builder = new VoiceResponse.Builder();
 
-        builder.say(new Say.Builder("Hallo, du brauchst Hilfe? Hinterlasse uns dein Anliegen gleich nach dem Piepton.")
+        Say sayGreeting = new Say.Builder("Hallo, du brauchst Hilfe?")
                 .language(Say.Language.DE_DE)
-                .build());
+                .build();
 
         // TODO: Gather only if ZIP code/city is not recognized
-        Gather gather = new Gather.Builder()
+        Gather gatherZip = new Gather.Builder()
+                .action(GatherZipCallback.PATH)
                 .numDigits(5)
-                .say(new Say.Builder("Bitte tippen Sie Ihre Postleitzahl ein.")
-                        .language(Say.Language.DE_DE)
-                        .build())
+                .timeout(10)
+                .speechTimeout("10")
+                .language(Gather.Language.DE_DE)
+                .inputs(Gather.Input.DTMF)
+                .say(
+                        new Say.Builder("Bitte gib uns deine Postleitzahl durch drücken der entsprechenden Tasten auf deinem Telefon.")
+                                .language(Say.Language.DE_DE)
+                                .build())
                 .build();
         
-    	Gather gatherTranscript = new Gather.Builder().action(GatherZipCallback.PATH)
-    			.timeout(3).language(Gather.Language.DE_DE)
+        Gather gatherRequest = new Gather.Builder()
+                .action(GatherRequestCallback.PATH)
+                .timeout(120)
+                .speechTimeout("120")
+                .language(Gather.Language.DE_DE)
                 .inputs(Gather.Input.SPEECH)
+                .say(
+                        new Say.Builder("Vielen Dank. Bitte nenn uns nun dein Anliegen.")
+                                .language(Say.Language.DE_DE)
+                                .build())
                 .build();
 
         Number number = new Number.Builder(phoneNumber)
@@ -76,15 +89,16 @@ public class IncomingWebhook {
                 .recordingStatusCallback(this.getCallbackUrl(RecordingStatusCallback.PATH))
                 .recordingStatusCallbackMethod(HttpMethod.POST)
                 .recordingStatusCallbackEvents(Collections.singletonList(Record.RecordingEvent.COMPLETED))
-                .playBeep(true)
-                .transcribe(true)
-                .transcribeCallback(this.getCallbackUrl(TranscriptionStatusCallback.PATH))
+                .playBeep(false)
+                .transcribe(false) //Only works with english
+                //.transcribeCallback(this.getCallbackUrl(TranscriptionStatusCallback.PATH))
                 .build();
 
-        builder.record(record)
-                .gather(gather)
-                .gather(gatherTranscript)
-                .dial(new Dial.Builder().number(number).build())
+        builder.say(sayGreeting)
+                .gather(gatherZip)
+                .record(record)
+                .gather(gatherRequest)
+                .dial(new Dial.Builder().number(number).build()) //TODO remove? useless?
                 .hangup(new Hangup.Builder().build());
 
         return builder.build();

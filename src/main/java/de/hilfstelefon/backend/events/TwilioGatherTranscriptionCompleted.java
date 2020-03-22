@@ -2,7 +2,10 @@ package de.hilfstelefon.backend.events;
 
 public class TwilioGatherTranscriptionCompleted {
 	
-    public static final String EVENTNAME = "twilioTranscriptionCompletedEvent";
+    private static final String EVENTNAME = "twilioTranscriptionCompletedEvent";
+
+    public static final String EVENTNAME_ZIP = EVENTNAME + "Zip";
+    public static final String EVENTNAME_REQUEST = EVENTNAME + "Request";
 
     private final String callSid;
     private final String transcriptionText;

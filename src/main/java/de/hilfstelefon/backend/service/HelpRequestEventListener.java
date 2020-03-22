@@ -1,11 +1,11 @@
 package de.hilfstelefon.backend.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 import com.twilio.exception.ApiConnectionException;
 import com.twilio.exception.ApiException;
@@ -17,8 +17,7 @@ import com.twilio.http.TwilioRestClient;
 import com.twilio.rest.Domains;
 import com.twilio.rest.api.v2010.account.call.Recording;
 import com.twilio.rest.api.v2010.account.call.RecordingFetcher;
-import com.twilio.rest.api.v2010.account.recording.Transcription;
-import com.twilio.rest.api.v2010.account.recording.TranscriptionFetcher;
+
 import de.hilfstelefon.backend.domain.HelpRequest;
 import de.hilfstelefon.backend.domain.TwilioCall;
 import de.hilfstelefon.backend.events.HelpRequestAvailable;
@@ -47,7 +46,7 @@ public class HelpRequestEventListener {
         helpRequest.city = event.getCall().city;
 
         helpRequest.audio = fetchRecordedCall(event.getCall());
-        helpRequest.transcription = fetchTranscriptedCall(event.getCall());
+        helpRequest.transcription = event.getCall().transcription_text;
 
         helpRequestRepository.persist(helpRequest);
     }
@@ -69,15 +68,6 @@ public class HelpRequestEventListener {
         }
 
         return mp3;
-    }
-
-    public String fetchTranscriptedCall(final TwilioCall call) {
-        if (call.transcription_text != "") {
-        	return call.transcription_text;
-        }
-        final TranscriptionFetcher fetcher = new TranscriptionFetcher(call.recording_sid, call.transcription_sid);
-        Transcription trans = fetcher.fetch(restClient);
-        return trans.getTranscriptionText();
     }
 
     private InputStream download(final TwilioRestClient restClient, final String uri) {

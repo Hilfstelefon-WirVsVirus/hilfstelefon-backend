@@ -8,14 +8,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-import de.hilfstelefon.backend.events.TwilioTranscriptionCompleted;
+import de.hilfstelefon.backend.events.TwilioGatherTranscriptionCompleted;
 import io.vertx.core.eventbus.EventBus;
 
-@Path("/twilio/status/transcription")
+@Path("/twilio/status/transcript")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public class TranscriptionStatusCallback {
+public class GatherRequestCallback {
+    public static final String PATH = "/twilio/status/request";
 
-    public static final String PATH = "twilio/status/transcription";
+    public static final String STATUS_COMPLETED = "completed";
 
     @Inject
     EventBus eventBus;
@@ -24,8 +25,8 @@ public class TranscriptionStatusCallback {
     @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
-            @FormParam("TranscriptionSid") String transcriptionSid
+            @FormParam("SpeechResult") String request
     ) {
-        eventBus.publish(TwilioTranscriptionCompleted.EVENTNAME, new TwilioTranscriptionCompleted(callSid, transcriptionSid));
+        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_REQUEST, new TwilioGatherTranscriptionCompleted(callSid, request));
     }
 }
