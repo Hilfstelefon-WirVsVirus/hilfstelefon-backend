@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import de.hilfstelefon.backend.events.TwilioGatherTranscriptionCompleted;
 import io.vertx.core.eventbus.EventBus;
 
-@Path("/twilio/status/transcript")
+@Path("/twilio/status/request")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 public class GatherRequestCallback {
     public static final String PATH = "/twilio/status/request";
