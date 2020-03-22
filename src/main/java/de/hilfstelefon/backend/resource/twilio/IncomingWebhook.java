@@ -58,7 +58,7 @@ public class IncomingWebhook {
     @POST
     @Path("/status/zip")
     public String gatherZipCallback(@FormParam("CallSid") String callSid,
-                                      @FormParam("Digits") String zip) {
+                                    @FormParam("Digits") String zip) {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, new TwilioGatherTranscriptionCompleted(callSid, zip));
 
         VoiceResponse.Builder builder = new VoiceResponse.Builder();
@@ -71,7 +71,7 @@ public class IncomingWebhook {
     @POST
     @Path("/status/request")
     public String gatherRequestCallback(@FormParam("CallSid") String callSid,
-                                          @FormParam("SpeechResult") String request) {
+                                        @FormParam("SpeechResult") String request) {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_REQUEST, new TwilioGatherTranscriptionCompleted(callSid, request));
 
         VoiceResponse.Builder builder = new VoiceResponse.Builder();
@@ -100,6 +100,10 @@ public class IncomingWebhook {
     }
 
     private void gatherRequest(VoiceResponse.Builder builder) {
+        builder.say(new Say.Builder("Vielen Dank. Bitte nenn uns nun dein Anliegen.")
+                .language(Say.Language.DE_DE)
+                .build());
+
         builder.record(new Record.Builder()
                 .recordingStatusCallback(this.getCallbackUrl(RecordingStatusCallback.PATH))
                 .recordingStatusCallbackMethod(HttpMethod.POST)
@@ -115,10 +119,6 @@ public class IncomingWebhook {
                 .speechTimeout("120")
                 .language(Gather.Language.DE_DE)
                 .inputs(Gather.Input.SPEECH)
-                .say(
-                        new Say.Builder("Vielen Dank. Bitte nenn uns nun dein Anliegen.")
-                                .language(Say.Language.DE_DE)
-                                .build())
                 .build());
     }
 
