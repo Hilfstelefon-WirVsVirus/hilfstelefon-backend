@@ -2,6 +2,7 @@ package de.hilfstelefon.backend.service;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +40,7 @@ public class HelpRequestEventListener {
     TwilioRestClient restClient;
 
     @ConsumeEvent(value = HelpRequestAvailable.EVENTNAME, blocking = true)
+    @Transactional
     public void onHelpRequestAvailable(HelpRequestAvailable event) {
         HelpRequest helpRequest = new HelpRequest();
 
