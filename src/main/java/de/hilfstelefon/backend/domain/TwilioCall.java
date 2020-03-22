@@ -18,7 +18,8 @@ public class TwilioCall extends PanacheEntity {
     public String timestamp;
 
     public boolean isTranscriptionCompleted() {
-        return transcription_text != "" || (this.transcription_sid != "" && this.transcription_sid != null);
+        return (this.transcription_text != null && !this.transcription_text.isEmpty()) ||
+                (this.transcription_sid != null && !this.transcription_sid.isEmpty());
     }
 
     public boolean isRecordingCompleted() {
