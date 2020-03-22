@@ -17,10 +17,10 @@ public class TwilioCall extends PanacheEntity {
     public String timestamp;
 
     public boolean isTranscriptionCompleted() {
-        return this.transcription_sid != "" && this.transcription_sid != null;
+        return this.transcription_sid != null && !this.transcription_sid.isEmpty();
     }
 
     public boolean isRecordingCompleted() {
-        return this.recording_sid != "" && this.recording_sid != null;
+        return this.recording_sid != null && !this.recording_sid.isEmpty();
     }
 }
