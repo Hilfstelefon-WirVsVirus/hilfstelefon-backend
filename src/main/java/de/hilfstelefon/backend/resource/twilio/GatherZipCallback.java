@@ -6,6 +6,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.hilfstelefon.backend.events.TwilioGatherTranscriptionCompleted;
 import io.vertx.core.eventbus.EventBus;
@@ -21,10 +22,11 @@ public class GatherZipCallback {
     EventBus eventBus;
 
     @POST
-    public void statusChanged(
+    public Response statusChanged(
             @FormParam("CallSid") String callSid,
             @FormParam("Digits") String zip
     ) {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, new TwilioGatherTranscriptionCompleted(callSid, zip));
+        return Response.ok().build();
     }
 }

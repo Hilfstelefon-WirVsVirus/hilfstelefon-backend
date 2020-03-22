@@ -7,6 +7,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.hilfstelefon.backend.events.TwilioRecordingCompleted;
 import io.vertx.core.eventbus.EventBus;
@@ -21,10 +22,11 @@ public class RecordingStatusCallback {
     EventBus eventBus;
 
     @POST
-    public void statusChanged(
+    public Response statusChanged(
             @FormParam("CallSid") String callSid,
             @FormParam("RecordingSid") String recordingSid
     ) {
         eventBus.publish(TwilioRecordingCompleted.EVENTNAME, new TwilioRecordingCompleted(callSid, recordingSid));
+        return Response.ok().build();
     }
 }
