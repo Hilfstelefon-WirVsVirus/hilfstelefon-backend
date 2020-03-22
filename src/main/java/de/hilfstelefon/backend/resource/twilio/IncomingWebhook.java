@@ -100,7 +100,7 @@ public class IncomingWebhook {
     }
 
     private void gatherRequest(VoiceResponse.Builder builder) {
-        builder.say(new Say.Builder("Vielen Dank. Bitte nenn uns nun dein Anliegen.")
+        builder.say(new Say.Builder("Vielen Dank. Bitte nenn uns nun dein Anliegen. Lege anschließend auf. Wir kümmern uns drum.")
                 .language(Say.Language.DE_DE)
                 .build());
 
