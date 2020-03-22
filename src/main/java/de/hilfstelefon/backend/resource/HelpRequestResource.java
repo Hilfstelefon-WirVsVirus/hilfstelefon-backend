@@ -23,6 +23,8 @@ import de.hilfstelefon.backend.resource.request.HelpRequestPatch;
 @Produces(MediaType.APPLICATION_JSON)
 public class HelpRequestResource {
 
+    public static final String PATH = "help-request";
+
     @Inject
     HelpRequestRepository helpRequestRepository;
 

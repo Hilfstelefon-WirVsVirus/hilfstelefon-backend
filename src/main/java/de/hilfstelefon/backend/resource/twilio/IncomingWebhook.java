@@ -26,6 +26,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @Produces(MediaType.APPLICATION_XML)
 public class IncomingWebhook {
 
+    public static final String PATH = "twilio/incoming";
+
     @Inject
     TwilioCallRepository twilioCallRepository;
 

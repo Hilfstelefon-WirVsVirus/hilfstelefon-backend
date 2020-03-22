@@ -45,7 +45,7 @@ public class HelpRequestEventListener {
     @ConfigProperty(name = "twilio.account-sid")
     String accountSid;
 
-    @ConsumeEvent(value = HelpRequestAvailable.EVENTNAME)
+    @ConsumeEvent(value = HelpRequestAvailable.EVENTNAME, blocking = true)
     public void onHelpRequestAvailable(HelpRequestAvailable event) {
         HelpRequest helpRequest = new HelpRequest();
 
