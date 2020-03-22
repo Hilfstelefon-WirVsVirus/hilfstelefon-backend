@@ -1,9 +1,10 @@
 package de.hilfstelefon.backend.repository;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,16 @@ import io.quarkus.panache.common.Sort;
 
 @ApplicationScoped
 public class HelpRequestRepository implements PanacheRepository<HelpRequest> {
+
+    @PostConstruct
+    @Transactional
+    public void init() {
+        // Persist some dummy data to the database for the development phase
+        persist(
+                createHelpRequest("Moin. Ich bräuchte Hilfe beim Einkauf.", "Bremen", "28203"),
+                createHelpRequest("Hallo. Kann mir jemand frisches Obst bringen?", "Hamburg", "20146")
+        );
+    }
 
     public List<HelpRequest> find(String city, String zip, Status status) {
         Map<String, Object> parameters = new HashMap<>();
@@ -35,21 +46,12 @@ public class HelpRequestRepository implements PanacheRepository<HelpRequest> {
         return list(query, defaultSort, parameters);
     }
 
-    public List<HelpRequest> getExamples() {
-        List<HelpRequest> helpRequests = new ArrayList<>();
-        helpRequests.add(createTask());
-        helpRequests.add(createTask());
-        helpRequests.add(createTask());
-
-        return helpRequests;
-    }
-
-    private HelpRequest createTask() {
+    private HelpRequest createHelpRequest(String transcription, String city, String zip) {
         HelpRequest helpRequest = new HelpRequest();
         helpRequest.creationDate = LocalDateTime.now();
-        helpRequest.transcription = "Lorem Ipsum";
-        helpRequest.city = "Bremen";
-        helpRequest.zip = "28203";
+        helpRequest.transcription = transcription;
+        helpRequest.city = city;
+        helpRequest.zip = zip;
 
         return helpRequest;
     }
