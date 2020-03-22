@@ -32,12 +32,15 @@ import io.vertx.core.eventbus.EventBus;
 
 @ApplicationScoped
 public class HelpRequestEventListener {
+
     @Inject
     HelpRequestRepository helpRequestRepository;
 
     @Inject
     EventBus eventBus;
 
+    @Inject
+    TwilioRestClient restClient;
     
     @ConfigProperty(name = "twilio.password")
     String password;
@@ -60,10 +63,7 @@ public class HelpRequestEventListener {
         eventBus.publish(HelpRequestAdded.EVENTNAME, new HelpRequestAdded(helpRequest));
     }
 
-    
     public byte[] fetchRecordedCall(final TwilioCall call) {
-        Twilio.init(accountSid, password);
-        final TwilioRestClient restClient = Twilio.getRestClient();
         final RecordingFetcher fetcher = new RecordingFetcher(call.callsid, call.recording_sid);
         final Recording recording = fetcher.fetch(restClient);
 
@@ -83,9 +83,6 @@ public class HelpRequestEventListener {
     }
 
     public String fetchTranscriptedCall(final TwilioCall call) {
-        Twilio.init(accountSid, password);
-        final TwilioRestClient restClient = Twilio.getRestClient();
-
         final TranscriptionFetcher fetcher = new TranscriptionFetcher(call.recording_sid, call.transcription_sid);
         Transcription trans = fetcher.fetch(restClient);
         return trans.getTranscriptionText();
