@@ -73,6 +73,9 @@ public class HelpRequestEventListener {
     }
 
     public String fetchTranscriptedCall(final TwilioCall call) {
+        if (call.transcription_text != "") {
+        	return call.transcription_text;
+        }
         final TranscriptionFetcher fetcher = new TranscriptionFetcher(call.recording_sid, call.transcription_sid);
         Transcription trans = fetcher.fetch(restClient);
         return trans.getTranscriptionText();

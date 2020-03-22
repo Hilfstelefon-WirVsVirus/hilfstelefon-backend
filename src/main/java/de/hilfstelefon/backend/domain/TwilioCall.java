@@ -10,6 +10,7 @@ public class TwilioCall extends PanacheEntity {
     public String callsid;
     public String recording_sid;
     public String transcription_sid;
+    public String transcription_text;
 
     public String phonenumber;
     public String city;
@@ -17,7 +18,7 @@ public class TwilioCall extends PanacheEntity {
     public String timestamp;
 
     public boolean isTranscriptionCompleted() {
-        return this.transcription_sid != null && !this.transcription_sid.isEmpty();
+        return transcription_text != "" || (this.transcription_sid != "" && this.transcription_sid != null);
     }
 
     public boolean isRecordingCompleted() {

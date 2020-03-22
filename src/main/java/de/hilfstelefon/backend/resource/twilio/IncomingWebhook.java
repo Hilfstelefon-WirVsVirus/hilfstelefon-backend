@@ -60,6 +60,11 @@ public class IncomingWebhook {
                         .language(Say.Language.DE_DE)
                         .build())
                 .build();
+        
+    	Gather gatherTranscript = new Gather.Builder().action(GatherZipCallback.PATH)
+    			.timeout(3).language(Gather.Language.DE_DE)
+                .inputs(Gather.Input.SPEECH)
+                .build();
 
         Number number = new Number.Builder(phoneNumber)
                 .statusCallback(this.getCallbackUrl(CallStatusCallback.PATH))
@@ -78,6 +83,7 @@ public class IncomingWebhook {
 
         builder.record(record)
                 .gather(gather)
+                .gather(gatherTranscript)
                 .dial(new Dial.Builder().number(number).build())
                 .hangup(new Hangup.Builder().build());
 
