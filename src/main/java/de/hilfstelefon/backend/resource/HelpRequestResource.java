@@ -42,8 +42,7 @@ public class HelpRequestResource {
             return Response.status(404).build();
         }
 
-        helpRequest.status = helpRequestPatch.getStatus();
-        helpRequestRepository.persist(helpRequest);
+        helpRequest = helpRequestRepository.updateStatus(helpRequest, helpRequestPatch.getStatus());
 
         return Response.status(200).entity(helpRequest).build();
     }

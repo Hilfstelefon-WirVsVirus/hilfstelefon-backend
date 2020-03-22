@@ -46,6 +46,14 @@ public class HelpRequestRepository implements PanacheRepository<HelpRequest> {
         return list(query, defaultSort, parameters);
     }
 
+    @Transactional
+    public HelpRequest updateStatus(HelpRequest helpRequest, Status status) {
+        helpRequest.status = status;
+        update("status = ?1 WHERE id = ?2", helpRequest.status, helpRequest.id);
+
+        return helpRequest;
+    }
+
     private HelpRequest createHelpRequest(String transcription, String city, String zip) {
         HelpRequest helpRequest = new HelpRequest();
         helpRequest.creationDate = LocalDateTime.now();
