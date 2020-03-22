@@ -89,7 +89,7 @@ public class IncomingWebhook {
                 .action(GATHER_ZIP_PATH)
                 .numDigits(5)
                 .timeout(10)
-                .speechTimeout("10")
+                .speechTimeout("auto")
                 .language(Gather.Language.DE_DE)
                 .inputs(Gather.Input.DTMF)
                 .say(
@@ -116,7 +116,7 @@ public class IncomingWebhook {
         builder.gather(new Gather.Builder()
                 .action(GATHER_REQUEST_PATH)
                 .timeout(120)
-                .speechTimeout("120")
+                .speechTimeout("auto")
                 .language(Gather.Language.DE_DE)
                 .inputs(Gather.Input.SPEECH)
                 .build());
