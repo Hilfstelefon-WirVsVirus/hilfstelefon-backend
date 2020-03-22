@@ -44,12 +44,10 @@ public class IncomingWebhook {
 
     @POST
     @Path("/incoming")
-    public String incomingCall(
-            @FormParam("CallSid") String callSid,
-            @FormParam("Caller") String caller,
-            @FormParam("FromCity") String fromCity,
-            @FormParam("FromZip") String fromZip
-    ) {
+    public String incomingCall(@FormParam("CallSid") String callSid,
+                               @FormParam("Caller") String caller,
+                               @FormParam("FromCity") String fromCity,
+                               @FormParam("FromZip") String fromZip) {
         System.out.printf("Incoming call %s from %s %s!\n", callSid, fromZip, fromCity);
 
         return createResponse().toXml();
