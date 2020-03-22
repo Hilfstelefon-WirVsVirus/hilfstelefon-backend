@@ -7,7 +7,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import java.util.Collections;
 
@@ -48,38 +47,45 @@ public class IncomingWebhook {
                                @FormParam("Caller") String caller,
                                @FormParam("FromCity") String fromCity,
                                @FormParam("FromZip") String fromZip) {
-        System.out.printf("Incoming call %s from %s %s!\n", callSid, fromZip, fromCity);
+        VoiceResponse.Builder builder = new VoiceResponse.Builder();
+        introduction(builder);
+        gatherRequest(builder);
+        endCall(builder);
 
-        return createResponse().toXml();
+        return builder.build().toXml();
     }
 
     @POST
     @Path("/status/zip")
-    public Response gatherZipCallback(@FormParam("CallSid") String callSid,
+    public String gatherZipCallback(@FormParam("CallSid") String callSid,
                                       @FormParam("Digits") String zip) {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, new TwilioGatherTranscriptionCompleted(callSid, zip));
 
-        return Response.ok().build();
+        VoiceResponse.Builder builder = new VoiceResponse.Builder();
+        gatherRequest(builder);
+        endCall(builder);
+
+        return builder.build().toXml();
     }
 
     @POST
     @Path("/status/request")
-    public Response gatherRequestCallback(@FormParam("CallSid") String callSid,
+    public String gatherRequestCallback(@FormParam("CallSid") String callSid,
                                           @FormParam("SpeechResult") String request) {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_REQUEST, new TwilioGatherTranscriptionCompleted(callSid, request));
 
-        return Response.ok().build();
+        VoiceResponse.Builder builder = new VoiceResponse.Builder();
+        endCall(builder);
+
+        return builder.build().toXml();
     }
 
-    private VoiceResponse createResponse() {
-        VoiceResponse.Builder builder = new VoiceResponse.Builder();
-
-        Say sayGreeting = new Say.Builder("Hallo, du brauchst Hilfe?")
+    private void introduction(VoiceResponse.Builder builder) {
+        builder.say(new Say.Builder("Hallo, du brauchst Hilfe?")
                 .language(Say.Language.DE_DE)
-                .build();
+                .build());
 
-        // TODO: Gather only if ZIP code/city is not recognized
-        Gather gatherZip = new Gather.Builder()
+        builder.gather(new Gather.Builder()
                 .action(GATHER_ZIP_PATH)
                 .numDigits(5)
                 .timeout(10)
@@ -90,9 +96,20 @@ public class IncomingWebhook {
                         new Say.Builder("Bitte gib uns deine Postleitzahl durch drücken der entsprechenden Tasten auf deinem Telefon.")
                                 .language(Say.Language.DE_DE)
                                 .build())
-                .build();
-        
-        Gather gatherRequest = new Gather.Builder()
+                .build());
+
+        builder.record(new Record.Builder()
+                .recordingStatusCallback(this.getCallbackUrl(RecordingStatusCallback.PATH))
+                .recordingStatusCallbackMethod(HttpMethod.POST)
+                .recordingStatusCallbackEvents(Collections.singletonList(Record.RecordingEvent.COMPLETED))
+                .playBeep(false)
+                .transcribe(false) //Only works with english
+                //.transcribeCallback(this.getCallbackUrl(TranscriptionStatusCallback.PATH))
+                .build());
+    }
+
+    private void gatherRequest(VoiceResponse.Builder builder) {
+        builder.gather(new Gather.Builder()
                 .action(GATHER_REQUEST_PATH)
                 .timeout(120)
                 .speechTimeout("120")
@@ -102,31 +119,20 @@ public class IncomingWebhook {
                         new Say.Builder("Vielen Dank. Bitte nenn uns nun dein Anliegen.")
                                 .language(Say.Language.DE_DE)
                                 .build())
-                .build();
+                .build());
+    }
 
-        Number number = new Number.Builder(phoneNumber)
-                .statusCallback(this.getCallbackUrl(CallStatusCallback.PATH))
-                .statusCallbackMethod(HttpMethod.POST)
-                .statusCallbackEvents(Collections.singletonList(Number.Event.COMPLETED))
-                .build();
+    private void endCall(VoiceResponse.Builder builder) {
+        //TODO remove? useless?
+        builder.dial(
+                new Dial.Builder().number(
+                        new Number.Builder(phoneNumber)
+                                .statusCallback(this.getCallbackUrl(CallStatusCallback.PATH))
+                                .statusCallbackMethod(HttpMethod.POST)
+                                .statusCallbackEvents(Collections.singletonList(Number.Event.COMPLETED))
+                                .build()).build());
 
-        Record record = new Record.Builder()
-                .recordingStatusCallback(this.getCallbackUrl(RecordingStatusCallback.PATH))
-                .recordingStatusCallbackMethod(HttpMethod.POST)
-                .recordingStatusCallbackEvents(Collections.singletonList(Record.RecordingEvent.COMPLETED))
-                .playBeep(false)
-                .transcribe(false) //Only works with english
-                //.transcribeCallback(this.getCallbackUrl(TranscriptionStatusCallback.PATH))
-                .build();
-
-        builder.say(sayGreeting)
-                .gather(gatherZip)
-                .record(record)
-                .gather(gatherRequest)
-                .dial(new Dial.Builder().number(number).build()) //TODO remove? useless?
-                .hangup(new Hangup.Builder().build());
-
-        return builder.build();
+        builder.hangup(new Hangup.Builder().build());
     }
 
     private String getCallbackUrl(String path) {
