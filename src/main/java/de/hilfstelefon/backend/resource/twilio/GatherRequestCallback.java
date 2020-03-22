@@ -22,7 +22,6 @@ public class GatherRequestCallback {
     EventBus eventBus;
 
     @POST
-    @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
             @FormParam("SpeechResult") String request

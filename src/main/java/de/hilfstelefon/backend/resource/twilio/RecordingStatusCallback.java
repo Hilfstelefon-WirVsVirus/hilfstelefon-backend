@@ -21,7 +21,6 @@ public class RecordingStatusCallback {
     EventBus eventBus;
 
     @POST
-    @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
             @FormParam("RecordingSid") String recordingSid
