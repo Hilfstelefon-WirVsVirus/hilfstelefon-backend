@@ -97,7 +97,9 @@ public class IncomingWebhook {
                                 .language(Say.Language.DE_DE)
                                 .build())
                 .build());
+    }
 
+    private void gatherRequest(VoiceResponse.Builder builder) {
         builder.record(new Record.Builder()
                 .recordingStatusCallback(this.getCallbackUrl(RecordingStatusCallback.PATH))
                 .recordingStatusCallbackMethod(HttpMethod.POST)
@@ -106,9 +108,7 @@ public class IncomingWebhook {
                 .transcribe(false) //Only works with english
                 //.transcribeCallback(this.getCallbackUrl(TranscriptionStatusCallback.PATH))
                 .build());
-    }
 
-    private void gatherRequest(VoiceResponse.Builder builder) {
         builder.gather(new Gather.Builder()
                 .action(GATHER_REQUEST_PATH)
                 .timeout(120)
