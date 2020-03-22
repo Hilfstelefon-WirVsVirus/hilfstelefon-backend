@@ -21,7 +21,6 @@ import com.twilio.rest.api.v2010.account.recording.Transcription;
 import com.twilio.rest.api.v2010.account.recording.TranscriptionFetcher;
 import de.hilfstelefon.backend.domain.HelpRequest;
 import de.hilfstelefon.backend.domain.TwilioCall;
-import de.hilfstelefon.backend.events.HelpRequestAdded;
 import de.hilfstelefon.backend.events.HelpRequestAvailable;
 import de.hilfstelefon.backend.repository.HelpRequestRepository;
 import io.quarkus.vertx.ConsumeEvent;
@@ -51,8 +50,6 @@ public class HelpRequestEventListener {
         helpRequest.transcription = fetchTranscriptedCall(event.getCall());
 
         helpRequestRepository.persist(helpRequest);
-
-        //eventBus.publish(HelpRequestAdded.EVENTNAME, new HelpRequestAdded(helpRequest));
     }
 
     public byte[] fetchRecordedCall(final TwilioCall call) {
