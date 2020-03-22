@@ -1,11 +1,13 @@
 package de.hilfstelefon.backend.resource.twilio;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import java.util.Collections;
 
@@ -17,6 +19,8 @@ import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Number;
 import com.twilio.twiml.voice.Record;
 import com.twilio.twiml.voice.Say;
+import de.hilfstelefon.backend.events.TwilioGatherTranscriptionCompleted;
+import io.vertx.core.eventbus.EventBus;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/twilio")
@@ -32,6 +36,9 @@ public class IncomingWebhook {
     @ConfigProperty(name = "twilio.phone-number")
     String phoneNumber;
 
+    @Inject
+    EventBus eventBus;
+
     @POST
     @Path("/incoming")
     public String incomingCall(
@@ -43,6 +50,24 @@ public class IncomingWebhook {
         System.out.printf("Incoming call %s from %s %s!\n", callSid, fromZip, fromCity);
 
         return createResponse().toXml();
+    }
+
+    @POST
+    @Path("/status/zip")
+    public Response gatherZipCallback(@FormParam("CallSid") String callSid,
+                                      @FormParam("Digits") String zip) {
+        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, new TwilioGatherTranscriptionCompleted(callSid, zip));
+
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/status/request")
+    public Response gatherRequestCallback(@FormParam("CallSid") String callSid,
+                                          @FormParam("SpeechResult") String request) {
+        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_REQUEST, new TwilioGatherTranscriptionCompleted(callSid, request));
+
+        return Response.ok().build();
     }
 
     private VoiceResponse createResponse() {
