@@ -1,7 +1,6 @@
 package de.hilfstelefon.backend.resource.twilio;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -22,11 +21,10 @@ public class GatherZipCallback {
     EventBus eventBus;
 
     @POST
-    @Transactional
     public void statusChanged(
             @FormParam("CallSid") String callSid,
             @FormParam("Digits") String zip
     ) {
-        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, zip);
+        eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, new TwilioGatherTranscriptionCompleted(callSid, zip));
     }
 }
