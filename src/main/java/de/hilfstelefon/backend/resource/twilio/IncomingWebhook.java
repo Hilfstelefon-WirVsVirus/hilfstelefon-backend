@@ -62,8 +62,9 @@ public class IncomingWebhook {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_ZIP, new TwilioGatherTranscriptionCompleted(callSid, zip));
 
         VoiceResponse.Builder builder = new VoiceResponse.Builder();
-        gatherRequest(builder);
-        endCall(builder);
+        builder.say(new Say.Builder("Ich habe " + zip + " verstanden.")
+                .language(Say.Language.DE_DE)
+                .build());
 
         return builder.build().toXml();
     }
@@ -73,11 +74,7 @@ public class IncomingWebhook {
     public String gatherRequestCallback(@FormParam("CallSid") String callSid,
                                         @FormParam("SpeechResult") String request) {
         eventBus.publish(TwilioGatherTranscriptionCompleted.EVENTNAME_REQUEST, new TwilioGatherTranscriptionCompleted(callSid, request));
-
-        VoiceResponse.Builder builder = new VoiceResponse.Builder();
-        endCall(builder);
-
-        return builder.build().toXml();
+        return new VoiceResponse.Builder().build().toXml();
     }
 
     private void introduction(VoiceResponse.Builder builder) {
