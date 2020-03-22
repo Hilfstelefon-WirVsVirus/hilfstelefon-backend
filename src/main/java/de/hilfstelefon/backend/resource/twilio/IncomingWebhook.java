@@ -1,6 +1,5 @@
 package de.hilfstelefon.backend.resource.twilio;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -18,10 +17,9 @@ import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Number;
 import com.twilio.twiml.voice.Record;
 import com.twilio.twiml.voice.Say;
-import de.hilfstelefon.backend.repository.TwilioCallRepository;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Path("/twilio/incoming")
+@Path("/twilio")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 @Produces(MediaType.APPLICATION_XML)
 public class IncomingWebhook {
@@ -35,6 +33,7 @@ public class IncomingWebhook {
     String phoneNumber;
 
     @POST
+    @Path("/incoming")
     public String incomingCall(
             @FormParam("CallSid") String callSid,
             @FormParam("Caller") String caller,
