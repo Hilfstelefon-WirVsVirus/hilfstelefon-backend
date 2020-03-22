@@ -44,7 +44,7 @@ public class TwilioEventListener {
         System.out.println("Processing transcription completed: " + event.getCallSid());
 
         TwilioCall call = repository.getOrCreate(event.getCallSid());
-        call.transcription_completed = true;
+        call.transcription_sid = event.getTranscriptionSid();
 
         repository.persist(call);
 
