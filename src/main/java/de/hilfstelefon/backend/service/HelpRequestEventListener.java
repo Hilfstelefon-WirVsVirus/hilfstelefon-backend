@@ -1,14 +1,11 @@
 package de.hilfstelefon.backend.service;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
-import com.twilio.Twilio;
 import com.twilio.exception.ApiConnectionException;
 import com.twilio.exception.ApiException;
 import com.twilio.exception.RestException;
@@ -21,9 +18,6 @@ import com.twilio.rest.api.v2010.account.call.Recording;
 import com.twilio.rest.api.v2010.account.call.RecordingFetcher;
 import com.twilio.rest.api.v2010.account.recording.Transcription;
 import com.twilio.rest.api.v2010.account.recording.TranscriptionFetcher;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import de.hilfstelefon.backend.domain.HelpRequest;
 import de.hilfstelefon.backend.domain.TwilioCall;
 import de.hilfstelefon.backend.events.HelpRequestAdded;
@@ -43,17 +37,6 @@ public class HelpRequestEventListener {
 
     @Inject
     TwilioRestClient restClient;
-    
-    @ConfigProperty(name = "twilio.password")
-    String password;
-
-    @ConfigProperty(name = "twilio.account-sid")
-    String accountSid;
-
-    @PostConstruct
-    public void init() {
-        Twilio.init(accountSid, password);
-    }
 
     @ConsumeEvent(value = HelpRequestAvailable.EVENTNAME, blocking = true)
     public void onHelpRequestAvailable(HelpRequestAvailable event) {
@@ -71,7 +54,6 @@ public class HelpRequestEventListener {
     }
 
     public byte[] fetchRecordedCall(final TwilioCall call) {
-        final TwilioRestClient restClient = Twilio.getRestClient();
         final RecordingFetcher fetcher = new RecordingFetcher(call.callsid, call.recording_sid);
         final Recording recording = fetcher.fetch(restClient);
 
@@ -91,13 +73,11 @@ public class HelpRequestEventListener {
     }
 
     public String fetchTranscriptedCall(final TwilioCall call) {
-        final TwilioRestClient restClient = Twilio.getRestClient();
-
         final TranscriptionFetcher fetcher = new TranscriptionFetcher(call.recording_sid, call.transcription_sid);
         Transcription trans = fetcher.fetch(restClient);
         return trans.getTranscriptionText();
     }
-    
+
     private InputStream download(final TwilioRestClient restClient, final String uri) {
         final Request request = new Request(HttpMethod.GET, Domains.API.toString(), uri, restClient.getRegion());
 
